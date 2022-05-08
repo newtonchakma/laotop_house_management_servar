@@ -27,11 +27,18 @@ async function run(){
             const laptops = await cursor.toArray();
             res.send(laptops);
         });
+
         app.get('/laptop/:id', async(req, res) =>{
             const id  = req.params.id;
             const query = {_id: ObjectId(id)};
-            const laptop = await laptopCollection.findOneAndDelete(query);
+            const laptop = await laptopCollection.findOne(query)
             res.send(laptop)
+        });
+
+        app.post('/laptop', async(req, res) =>{
+            const newLaptop = req.body;
+            const result = await laptopCollection.insertOne(newLaptop);
+            res.send(result);
         })
     }
 
