@@ -20,6 +20,7 @@ async function run(){
     try{
         await client.connect();
         const laptopCollection = client.db('warehouse').collection('laptop');
+        const newLaptopAdd = client.db('warehouse').collection('myItem');
     
         app.get('/laptop', async(req, res)=>{
             const query ={};
@@ -35,10 +36,20 @@ async function run(){
             res.send(laptop)
         });
 
-        app.post('/laptop', async(req, res) =>{
+        app.post('/myItem', async(req, res) =>{
             const newLaptop = req.body;
-            const result = await laptopCollection.insertOne(newLaptop);
+            const result = await newLaptopAdd.insertOne(newLaptop);
             res.send(result);
+        })
+
+        app.get('/myItem', async(req, res)=>{
+            const email =req.query.email;
+            console.log(email);
+            const query = {email:email};
+            const cursor = newLaptopAdd.find(query);
+            const orders = await cursor.toArray();
+            res.send(orders)
+
         })
     }
 
