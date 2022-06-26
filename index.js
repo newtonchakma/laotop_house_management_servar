@@ -41,10 +41,30 @@ async function run(){
             const result = await laptopCollection.insertOne(update)
             res.send(result)
         })
+        app.put('/laptop/:id', async(req,res)=>{
+            const id = req.params.id;
+            const data = req.body;
+            const filter = {_id:ObjectId(id)};
+            const options = {upset:true};
+            const updateDoc = {
+                $set:{
+                   quantity: data.newQuantity
+                }
+            };
+            const result = await laptopCollection.updateOne(filter,updateDoc,options);
+            res.send(result)
+
+        })
         app.delete('/laptop/:id',async(req,res)=>{
             const id =req.params.id;
             const query = {_id: ObjectId(id)};
             const result = await laptopCollection.deleteOne(query);
+            res.send(result)
+        })
+        app.delete('/myItem/:id',async(req,res)=>{
+            const id =req.params.id;
+            const query = {_id: ObjectId(id)};
+            const result = await newLaptopAdd.deleteOne(query);
             res.send(result)
         })
 
@@ -62,12 +82,7 @@ async function run(){
             res.send(orders)
 
         })
-        app.delete('/myitem/:id',async(req,res)=>{
-            const id = req.params.id;
-            const query = {_id: ObjectId(id)};
-            const result = await newLaptopAdd.deleteOne(query)      
-            res.send(result)
-        })
+      
         app.get('/team', async(req, res)=>{
             const query ={};
             const cursor = ourTeam.find(query);
